@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 
 
-
+// port
+const port = process.env.PORT || 3000;
 
 // Ler json
 app.use(
@@ -38,7 +39,7 @@ mongoose
     )
     .then(() =>{
         console.log("Conectado no MongoDB")
-        app.listen()
+        app.listen(port)
     })
     .catch((err) => console.log(err))
 
