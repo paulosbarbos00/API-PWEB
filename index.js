@@ -1,3 +1,4 @@
+
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
@@ -18,18 +19,20 @@ app.use(express.json())
 app.use(cors());
 
 
-//Rotas da API
-const bookRoutes = require('./routes/bookRoutes')
-
-app.use('/book', bookRoutes)
-
-
 // rota inicial / endpoint
 app.get('/', (req, res) => {
 
     res.json({ message: 'Hop!' })
 
 })
+
+//Rotas da API
+const bookRoutes = require('./routes/bookRoutes')
+
+app.use('/book', bookRoutes)
+
+
+
 
 // entregar uma porta
 
