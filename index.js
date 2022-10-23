@@ -1,50 +1,47 @@
 require('dotenv').config();
 
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
+const app = express();
 
+// User login - Database
+const DB_USER = process.env.DB_USER;
+const DB_PASS = encodeURIComponent(process.env.DB_PASS);
 
-// port
+// Random port Heroku
 const port = process.env.PORT || 3000;
 
-// Ler json
+// Read JSON / Middlewares
 app.use(
-    express.urlencoded({
-        extended: true,
-    }),
-)
+  express.urlencoded({
+    extended: true,
+  }),
+);
 
-app.use(express.json())
+app.use(express.json());
 app.use(cors());
 
-
-// rota inicial / endpoint
+// Initial Endpoint
 app.get('/', (req, res) => {
+  res.json({ message: 'Acesse /books' });
+});
 
-    res.json({ message: 'Hop!' })
+// API Routes
+const booksRoutes = require('./routes/booksRoutes');
+app.use('/books', booksRoutes);
 
-})
-
-//Rotas da API
-const bookRoutes = require('./routes/bookRoutes')
-
-app.use('/book', bookRoutes)
-
-
-
-
-// entregar uma porta
-
+// Send port and connect to database
 mongoose
-.connect(
-    'mongodb+srv://psb2:Pweb00@api-pweb.fezxkns.mongodb.net/bancopwebapi?retryWrites=true&w=majority'
-    )
-    .then(() =>{
-        console.log("Conectado no MongoDB")
-        app.listen(port)
-    })
-    .catch((err) => console.log(err))
+  .connect(
+    `mongodb+srv://${DB_USER}:${DB_PASS}@api-pweb.fezxkns.mongodb.net/bancopwebapi?retryWrites=true&w=majority`,
+  )
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(port);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 
